@@ -75,12 +75,25 @@ public class othello extends JPanel {
     public static void placeDisc(String color,int x,int y) {
         
         if (color == "black") {
-            labelGrid[x][y].setIcon(blackIcon);
+            labelGrid[y][x].setIcon(blackIcon);
             othello.boardMatrix[x][y] = 1;
+            blackDiscs ++;
+            Status.setText("Status: White's turn.");
+            blackCount.setText("Black: " + blackDiscs);
+            System.out.printf("Jlabel[%d][%d] is " + color + "%n",x,y);
+            player = "white";
+            othello.printBoard();
         }
         else {
-            labelGrid[x][y].setIcon(whiteIcon);
+            labelGrid[y][x].setIcon(whiteIcon);
             othello.boardMatrix[x][y] = 2;
+            whiteDiscs ++;
+            highlightPossibleMoves("black");
+            Status.setText("Status: Black's turn");
+            whiteCount.setText("White: " + whiteDiscs);
+            System.out.printf("Jlabel[%d][%d] is " + player + "%n",x,y);
+            player = "black";  
+            othello.printBoard();
         }
     }
 
@@ -111,27 +124,16 @@ public class othello extends JPanel {
                 Icon icon = label.getIcon();
 
                 if (player == "black" && isValidMove("black",x,y) && !isGameOver()) {
-                    label.setIcon(blackIcon);
+                    //label.setIcon(blackIcon);
                     resetCellsHighlighted();
-                    blackDiscs ++;
-                    Status.setText("Status: White's turn.");
-                    blackCount.setText("Black: " + blackDiscs);
-                    System.out.printf("Jlabel[%d][%d] is " + player + "%n",x,y);
-                    othello.boardMatrix[x][y] = 1;
-                    player = "white";
-                    othello.printBoard();
+                    placeDisc("black", x, y);
+                  
                 }
                 else if (player == "white" && isValidMove("white",x,y) && !isGameOver()) {
-                    label.setIcon(whiteIcon);
+                    //label.setIcon(whiteIcon);
                     resetCellsHighlighted();
-                    whiteDiscs ++;
-                    Status.setText("Status: Black's turn");
-                    whiteCount.setText("White: " + whiteDiscs);
-                    System.out.printf("Jlabel[%d][%d] is " + player + "%n",x,y);
-                    othello.boardMatrix[x][y] = 2;
-                    player = "black";  
-                    othello.printBoard();
-                    highlightPossibleMoves("black");
+                    placeDisc("white", x, y);
+
                 }
                 else {
                     return;
