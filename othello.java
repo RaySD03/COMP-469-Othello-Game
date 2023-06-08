@@ -18,7 +18,7 @@ public class othello extends JPanel {
     private static int size = 8;
     private static int icon_length = 55;
     private static final Color backgroundColor = Color.BLACK;     
-    private static final Color cellColor = Color.GREEN.darker();    //Board Cell Color
+    private static final Color cellColor = Color.GREEN.darker();    //Board Cell Baclground Color
     private static JLabel[][] labelGrid = new JLabel[size][size];   //Represent Cells with 8 x 8 Jlabels
     private static Icon blankIcon;
     private static Icon blackIcon;
@@ -83,6 +83,7 @@ public class othello extends JPanel {
             System.out.printf("Jlabel[%d][%d] is " + color + "%n",x,y);
             player = "white";
             othello.printBoard();
+            resetCellsHighlighted();
         }
         else {
             labelGrid[y][x].setIcon(whiteIcon);
@@ -121,17 +122,15 @@ public class othello extends JPanel {
             
             if (x >= 0) {
                 // Check if cell is empty or not
-                Icon icon = label.getIcon();
 
                 if (player == "black" && isValidMove("black",x,y) && !isGameOver()) {
                     //label.setIcon(blackIcon);
-                    resetCellsHighlighted();
                     placeDisc("black", x, y);
                   
                 }
                 else if (player == "white" && isValidMove("white",x,y) && !isGameOver()) {
                     //label.setIcon(whiteIcon);
-                    resetCellsHighlighted();
+
                     placeDisc("white", x, y);
 
                 }
@@ -253,6 +252,7 @@ public class othello extends JPanel {
     }
 
     private static void setupGUI() {
+        resetCellsHighlighted();
         setupGame();
 
         //Create the game window
