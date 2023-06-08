@@ -33,7 +33,7 @@ public class othello extends JPanel {
     private static int blackDiscs = 2;
     private static int whiteDiscs = 2;
     private static int[][] boardMatrix = new int[8][8]; // 0 = blank, 1 = black, 2 = white
-    private static int[][] affectedDics = new int[size][size];
+    private static int[][] affectedDiscs = new int[size][size];
 
     public othello() {
         blankIcon = createIcon(new Color(0,0,0,0));
@@ -209,6 +209,7 @@ public class othello extends JPanel {
             return false;
         }
     }
+
     private static void setupGame() {
         resetCellsHighlighted(); 
 
