@@ -26,10 +26,10 @@ public class GameLogic {
                 if(x + xpos < 0 || x + xpos > 7 || y + ypos < 0 || y + ypos > 7) //if adjacent square out of bounds then skip
                     continue;
                 
-                if(boardMatrix[x+xpos][y+ypos] == oppColor){
+                if(boardMatrix[x+xpos][y+ypos] == oppColor){ //If adjacent square is opposite color-
                     int ix = x+xpos;
                     int iy = y+ypos;
-                    while(!(ix + xpos < 0 || ix + xpos > 7 || iy + ypos < 0 || iy + ypos > 7)){
+                    while(!(ix + xpos < 0 || ix + xpos > 7 || iy + ypos < 0 || iy + ypos > 7)){ //start search in direction for same color same color if same color
                         //System.out.println("|| checking square[" + ix + "][" + iy + "]");
                         if(boardMatrix[ix][iy] == color)  
                             return true;
