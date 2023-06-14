@@ -1,4 +1,3 @@
-package Othello;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -73,33 +72,53 @@ public class othello extends JPanel {
         return new ImageIcon(img);
     }
 
-    public static void placeDisc(String color,int x,int y) {
-        
-        if (color == "black") {
-            labelGrid[y][x].setIcon(blackIcon);
-            othello.boardMatrix[x][y] = 1;
-            blackDiscs ++;
-            Status.setText("Status: White's turn.");
-            blackCount.setText("Black: " + blackDiscs);
-            System.out.printf("Jlabel[%d][%d] is " + color + "%n",x,y);
-            player = "white";
-            othello.printBoard();
-            resetCellsHighlighted();
-        }
-        else {
-            labelGrid[y][x].setIcon(whiteIcon);
-            othello.boardMatrix[x][y] = 2;
-            whiteDiscs ++;
-            highlightPossibleMoves("black");
-            Status.setText("Status: Black's turn");
-            whiteCount.setText("White: " + whiteDiscs);
-            System.out.printf("Jlabel[%d][%d] is " + player + "%n",x,y);
-            player = "black";  
-            othello.printBoard();
+     private static void flipDiscs(int x, int y, int discColor) {
+        int[][] directions = {
+            {-1, -1}, {-1, 0}, {-1, 1},
+            {0, -1}, {0, 1},
+            {1, -1}, {1, 0}, {1, 1}
+        };
+
+        for (int[] dir : directions) {
+            int dx = dir[0];
+            int dy = dir[1];
+            int curX = x + dx;
+            int curY = y + dy;
+
+            while (curX >= 0 && curX < size && curY >= 0 && curY < size && boardMatrix[curX][curY] == 3 - discColor) {
+                curX += dx;
+                curY += dy;
+            }
+
+            if (curX >= 0 && curX < size && curY >= 0 && curY < size && boardMatrix[curX][curY] == discColor) {
+                int flipX = x + dx;
+                int flipY = y + dy;
+
+                while (flipX != curX || flipY != curY) {
+                    System.out.println("Flipping [" + flipX + "][" + flipY + "]");
+                    boardMatrix[flipX][flipY] = discColor;
+                    labelGrid[flipX][flipY].setIcon(discColor == 1 ? blackIcon : whiteIcon);
+                    flipX += dx;
+                    flipY += dy;
+                }
+            }
         }
     }
 
-    private class MyMouse extends MouseAdapter {
+    public static void placeDisc(String color,int x,int y) {
+        
+        if (color == "black") {
+            labelGrid[x][y].setIcon(blackIcon);
+            othello.boardMatrix[x][y] = 1;
+            
+        }
+        else {
+            labelGrid[x][y].setIcon(whiteIcon);
+            othello.boardMatrix[x][y] = 2;
+        }
+    }
+
+   private class MyMouse extends MouseAdapter {
         @Override
         public void mousePressed(MouseEvent e) {
            
@@ -121,23 +140,62 @@ public class othello extends JPanel {
                 }
             }
             
+            /*
+            if(player == "black") {
+                List<Integer> li = GameLogic.validMoveDir(1, x, y, boardMatrix);
+                for(int i = 0;i<li.size();i++)
+                {
+                    System.out.println("[" + li.get(i) + "]");  
+                }
+            } else {
+                List<Integer> li = GameLogic.validMoveDir(2, x, y, boardMatrix);
+                for(int i = 0;i<li.size();i++)
+                {
+                    System.out.println("[" + li.get(i) + "]"); ;  
+                }
+            }
+            
+            
+            if(player == "black")
+                if(GameLogic.isValid(1, x, y, boardMatrix))
+                    System.out.println("Move is valid");
+                 else 
+                    System.out.println("Move is invalid");
+            else
+                if(GameLogic.isValid(2, x, y, boardMatrix))
+                      System.out.println("Move is valid");
+                 else 
+                      System.out.println("Move is invalid");    
+                
+            */
+            
             if (x >= 0) {
                 // Check if cell is empty or not
-
-                if (player == "black" && isValidMove("black",x,y) && !isGameOver()) {
-                    //label.setIcon(blackIcon);
-                    placeDisc("black", x, y);
-                  
+                Icon icon = label.getIcon();
+          
+                if (player == "black" && icon == blankIcon && blackDiscs != 0) {
+                    othello.flipDiscs(x, y, 1);
+                    label.setIcon(blackIcon);
+                    blackDiscs ++;
+                    Status.setText("Status: White's turn.");
+                    blackCount.setText("Black: " + blackDiscs);
+                    System.out.printf("Jlabel[%d][%d] is " + player + "%n",x,y);
+                    othello.boardMatrix[x][y] = 1;
+                    player = "white";
+                    othello.printBoard();
                 }
-                else if (player == "white" && isValidMove("white",x,y) && !isGameOver()) {
-                    //label.setIcon(whiteIcon);
-
-                    placeDisc("white", x, y);
-
+                else if (player == "white" && icon == blankIcon && whiteDiscs != 0) {
+                    othello.flipDiscs(x, y, 2);
+                    label.setIcon(whiteIcon);
+                    whiteDiscs ++;
+                    Status.setText("Status: Black's turn");
+                    whiteCount.setText("White: " + whiteDiscs);
+                    System.out.printf("Jlabel[%d][%d] is " + player + "%n",x,y);
+                    othello.boardMatrix[x][y] = 2;
+                    player = "black";  
+                    othello.printBoard();
                 }
-                else {
-                    return;
-                }
+           
             }
         }
     }
@@ -154,42 +212,38 @@ public class othello extends JPanel {
         }
     }
 
-    public static Boolean isValidMove(String player, int row, int column) {
+    public static boolean isValidMove(String player, int x, int y) {
+    if (boardMatrix[y][x] != 0) return false; // cell is not empty
 
-        int opponent = 1;
-        if (player == "black") {
-            opponent = 2;
-        }
+    int opponent = player.equals("black") ? 2 : 1;
 
-        // If cell is empty
-        if (boardMatrix[row][column] == 0) {
-            if (row + 1 < 8 && column + 1 < 8 && boardMatrix[row + 1][column + 1] == opponent) {
+    int[][] directions = {
+        {-1, -1}, {-1, 0}, {-1, 1},
+        {0, -1},{0, 1},
+        {1, -1}, {1, 0}, {1, 1}
+    };
+
+    for (int[] dir : directions) {
+        int dx = dir[0], dy = dir[1];
+        int curX = x + dx, curY = y + dy;
+
+        boolean hasOpponent = false;
+        while (curX >= 0 && curX < size && curY >= 0 && curY < size) {
+            if (boardMatrix[curY][curX] == opponent) {
+                hasOpponent = true;
+            } else if (boardMatrix[curY][curX] == 0 || !hasOpponent) {
+                break;
+            } else if (boardMatrix[curY][curX] == 3 - opponent) {
                 return true;
             }
-            else if (row + 1 < 8  && boardMatrix[row + 1][column] == opponent) {
-                return true;
-            }
-            else if (column + 1 < 8 && boardMatrix[row][column + 1] == opponent) {
-                return true;
-            }
-            else if (column - 1 > -1 && boardMatrix[row][column - 1] == opponent) {
-                return true;
-            }
-            else if (row - 1 > -1 && column - 1 > -1  && boardMatrix[row - 1][column - 1] == opponent) {
-                return true;
-            }
-            else if (row - 1 > -1 && boardMatrix[row - 1][column] == opponent) {
-                return true;
-            }
-            else if (row - 1 > -1 && column + 1 < 8  && boardMatrix[row - 1][column + 1] == opponent) {
-                return true;
-            }
-            else if (row + 1 < 8 && column - 1 > -1 && boardMatrix[row + 1][column - 1] == opponent) {
-                return true;
-           }
+
+            curX += dx;
+            curY += dy;
         }
-        return false;
     }
+
+    return false;
+}
 
     public static void highlightPossibleMoves(String player) {
 
