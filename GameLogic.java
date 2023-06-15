@@ -2,7 +2,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package Othello;
 import java.util.ArrayList;
 
 public class GameLogic {
@@ -50,8 +49,8 @@ public class GameLogic {
         return false;
     }
     
-     public static List<Integer> validMoveDir(int color,int x, int y, int[][]boardMatrix){ //Return list of numpad directions in the direction of pieces to flip
-        List<Integer> dirList = new ArrayList<>();                                        //1-bottom left, 2-bottom, 3-bottom-right etc 4-middle left etc.
+     public static ArrayList<Integer> validMoveDir(int color,int x, int y, int[][]boardMatrix){ //Return list of numpad directions in the direction of pieces to flip
+        ArrayList<Integer> dirList = new ArrayList<>();                                        //1-bottom left, 2-bottom, 3-bottom-right etc 4-middle left etc.
         int keypad = 0;                                                                   //returns empty list if move is not valid
         int oppColor = 1;
         if(color == 1)

@@ -53,7 +53,7 @@ public class othello extends JPanel {
                 label.setOpaque(true);
                 label.setBackground(cellColor);
                 label.addMouseListener(myMouse);
-                labelGrid[i][j] = label;
+                labelGrid[j][i] = label;
                 add(label);
             }
         }
@@ -129,9 +129,9 @@ public class othello extends JPanel {
             int y = -1;
             for (int i = 0; i < 8; i++) {
                 for (int j = 0; j < 8; j++) {
-                    if (label == labelGrid[i][j]) {
-                        x = i;
-                        y = j;
+                    if (label == labelGrid[j][i]) {
+                        x = j;
+                        y = i;
                         break;
                     }
                 }
@@ -139,41 +139,14 @@ public class othello extends JPanel {
                     break;
                 }
             }
-            
-            /*
-            if(player == "black") {
-                List<Integer> li = GameLogic.validMoveDir(1, x, y, boardMatrix);
-                for(int i = 0;i<li.size();i++)
-                {
-                    System.out.println("[" + li.get(i) + "]");  
-                }
-            } else {
-                List<Integer> li = GameLogic.validMoveDir(2, x, y, boardMatrix);
-                for(int i = 0;i<li.size();i++)
-                {
-                    System.out.println("[" + li.get(i) + "]"); ;  
-                }
-            }
-            
-            
-            if(player == "black")
-                if(GameLogic.isValid(1, x, y, boardMatrix))
-                    System.out.println("Move is valid");
-                 else 
-                    System.out.println("Move is invalid");
-            else
-                if(GameLogic.isValid(2, x, y, boardMatrix))
-                      System.out.println("Move is valid");
-                 else 
-                      System.out.println("Move is invalid");    
-                
-            */
-            
+
+
+            System.out.println("Cell [" + x + "][" + y + "] Was clicked");
             if (x >= 0) {
                 // Check if cell is empty or not
                 Icon icon = label.getIcon();
           
-                if (player == "black" && icon == blankIcon && blackDiscs != 0) {
+                if (player == "black" && icon == blankIcon && blackDiscs != 0 && GameLogic.isValid(1,x,y, boardMatrix)) {
                     othello.flipDiscs(x, y, 1);
                     label.setIcon(blackIcon);
                     blackDiscs ++;
@@ -183,8 +156,13 @@ public class othello extends JPanel {
                     othello.boardMatrix[x][y] = 1;
                     player = "white";
                     othello.printBoard();
+                    resetCellsHighlighted();
+                    highlightPossibleMoves("white");
+                    if(isGameOver()){
+                      System.out.println("Game is over");
+                    }
                 }
-                else if (player == "white" && icon == blankIcon && whiteDiscs != 0) {
+                else if (player == "white" && icon == blankIcon && whiteDiscs != 0 && GameLogic.isValid(2,x,y, boardMatrix)) {
                     othello.flipDiscs(x, y, 2);
                     label.setIcon(whiteIcon);
                     whiteDiscs ++;
@@ -194,8 +172,15 @@ public class othello extends JPanel {
                     othello.boardMatrix[x][y] = 2;
                     player = "black";  
                     othello.printBoard();
+                    resetCellsHighlighted();
+                    highlightPossibleMoves("black");
+                    if(isGameOver()){
+                      System.out.println("Game is over");
+                    }
+                } else {
+                  System.out.println("Move is not valid"); //GUI display later maybe
                 }
-           
+
             }
         }
     }
@@ -249,7 +234,7 @@ public class othello extends JPanel {
 
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                if(isValidMove(player,i,j)) {
+                if(GameLogic.isValid(player == "black"? 1:2,j,i,boardMatrix) && boardMatrix[j][i] == 0) { //For some reason it highlights moves with pieces on square, so check if square occupied
                     labelGrid[j][i].setBackground(Color.GREEN);
                 }
             }
@@ -301,7 +286,7 @@ public class othello extends JPanel {
 
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
-                labelGrid[j][i].setBackground(Color.GREEN.darker());
+                mainPanel.labelGrid[j][i].setBackground(Color.GREEN.darker());
             }
         }
     }
