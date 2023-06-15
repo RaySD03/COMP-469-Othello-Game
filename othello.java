@@ -26,6 +26,7 @@ public class othello extends JPanel {
     static JLabel Status = new JLabel("Status: Black begins");
     static JLabel blackCount = new JLabel(" Black: 0 ");
     static JLabel whiteCount = new JLabel(" White: 0 ");
+	static JLabel totalCount = new JLabel(" Total Disks: 0 ");
     static JButton resetButton = new JButton("Start Over");
 
     //Gameplay variables
@@ -264,6 +265,7 @@ public class othello extends JPanel {
         whiteDiscs = 2;
         blackDiscs = 2;
         player = "black";
+		totalCount.setText("Total Disks: " + (blackDiscs + whiteDiscs));
 
         //Initialize the board with 4 discs
         mainPanel.placeDisc("black", 3,3);
@@ -279,6 +281,7 @@ public class othello extends JPanel {
 
         blackCount.setText("Black: " + blackDiscs);
         whiteCount.setText("White: " + whiteDiscs);
+		totalCount.setText("   " +"Total Disks: " + (blackDiscs + whiteDiscs));
         Status.setText("Status: Black begins");
     }
 
@@ -313,6 +316,7 @@ public class othello extends JPanel {
         Stats.add(blackCount);
         Stats.addSeparator();
         Stats.add(whiteCount);
+		Stats.add(totalCount);
         mainFrame.add(Stats, BorderLayout.PAGE_START);
 
     }
