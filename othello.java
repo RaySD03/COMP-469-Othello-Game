@@ -16,7 +16,7 @@ import javax.swing.border.EmptyBorder;
 
 public class othello extends JPanel {
     private static int size = 8;
-    private static int icon_length = 55;
+    private static int icon_length = 65;
     private static final Color backgroundColor = Color.BLACK;     
     private static final Color cellColor = Color.GREEN.darker();    //Board Cell Baclground Color
     private static JLabel[][] labelGrid = new JLabel[size][size];   //Represent Cells with 8 x 8 Jlabels
