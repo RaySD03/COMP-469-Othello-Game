@@ -235,7 +235,7 @@ public class othello extends JPanel {
 
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                if(logic.isValid(getPlayerID(player),i,j,boardMatrix) && boardMatrix[i][j] == 0) {
+                if(GameLogic.isValid(getPlayerID(player),i,j,boardMatrix) && boardMatrix[i][j] == 0) {
                     labelGrid[i][j].setBackground(Color.GREEN);
                 }
             }
