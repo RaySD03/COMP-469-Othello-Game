@@ -147,7 +147,7 @@ public class othello extends JPanel {
                 // Check if cell is empty or not
                 Icon icon = label.getIcon();
           
-                if (player == "black" && icon == blankIcon && blackDiscs != 0 && GameLogic.isValid(1,x,y, boardMatrix)) {
+                 if (player == "black" && icon == blankIcon && blackDiscs != 0 && GameLogic.isValid(1,x,y, boardMatrix)) {
                     othello.flipDiscs(x, y, 1);
                     label.setIcon(blackIcon);
                     blackDiscs ++;
@@ -155,13 +155,14 @@ public class othello extends JPanel {
                     blackCount.setText("Black: " + blackDiscs);
                     System.out.printf("Jlabel[%d][%d] is " + player + "%n",x,y);
                     othello.boardMatrix[x][y] = 1;
-                    player = "white";
                     othello.printBoard();
                     resetCellsHighlighted();
-                    highlightPossibleMoves("white");
-                    if(isGameOver()){
-                      System.out.println("Game is over");
-                    }
+                    if(highlightPossibleMoves("white"))
+                      player = "white";
+                    else if(highlightPossibleMoves("black"))
+                      System.out.println("Black Moves again");
+                    else
+                      System.out.println("Game is over"); //Placeholder for GUI display to show game is over
                 }
                 else if (player == "white" && icon == blankIcon && whiteDiscs != 0 && GameLogic.isValid(2,x,y, boardMatrix)) {
                     othello.flipDiscs(x, y, 2);
@@ -170,14 +171,15 @@ public class othello extends JPanel {
                     Status.setText("Status: Black's turn");
                     whiteCount.setText("White: " + whiteDiscs);
                     System.out.printf("Jlabel[%d][%d] is " + player + "%n",x,y);
-                    othello.boardMatrix[x][y] = 2;
-                    player = "black";  
+                    othello.boardMatrix[x][y] = 2;  
                     othello.printBoard();
                     resetCellsHighlighted();
-                    highlightPossibleMoves("black");
-                    if(isGameOver()){
-                      System.out.println("Game is over");
-                    }
+                    if(highlightPossibleMoves("black"))
+                      player = "black";
+                    else if(highlightPossibleMoves("white"))
+                      System.out.println("White moves again");
+                    else
+                      System.out.println("Game is over");  //Placeholder for GUI display to show game is over
                 } else {
                   System.out.println("Move is not valid"); //GUI display later maybe
                 }
@@ -231,17 +233,19 @@ public class othello extends JPanel {
       return false;
    }
 
-    public static void highlightPossibleMoves(String player) {
-
+   public static boolean highlightPossibleMoves(String player) {  //added boolean to see is player has a valid move
+        boolean hasMove = false;
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                if(GameLogic.isValid(getPlayerID(player),i,j,boardMatrix) && boardMatrix[i][j] == 0) {
+                if(GameLogic.isValid(getPlayerID(player),i,j,boardMatrix) && boardMatrix[i][j] == 0) { //For some reason it highlights moves with pieces on square, so check if square occupied
                     labelGrid[i][j].setBackground(Color.GREEN);
+                    hasMove = true;
                 }
             }
         }
+        return hasMove;
     }
-	
+
     public static int getPlayerID(String player) {
         if (player == "black")
             return 1;
