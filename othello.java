@@ -225,18 +225,18 @@ public class othello extends JPanel {
 
             curX += dx;
             curY += dy;
-        }
-    }
+            }
+	 }
 
-    return false;
-}
+      return false;
+   }
 
     public static void highlightPossibleMoves(String player) {
 
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                if(GameLogic.isValid(player == "black"? 1:2,j,i,boardMatrix) && boardMatrix[j][i] == 0) { //For some reason it highlights moves with pieces on square, so check if square occupied
-                    labelGrid[j][i].setBackground(Color.GREEN);
+                if(logic.isValid(getPlayerID(player),i,j,boardMatrix) && boardMatrix[i][j] == 0) {
+                    labelGrid[i][j].setBackground(Color.GREEN);
                 }
             }
         }
