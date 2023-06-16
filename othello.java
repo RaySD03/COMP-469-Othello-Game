@@ -241,6 +241,13 @@ public class othello extends JPanel {
             }
         }
     }
+	
+    public static int getPlayerID(String player) {
+        if (player == "black")
+            return 1;
+
+        return 2;
+    }
 
     public static Boolean isGameOver() {
 
