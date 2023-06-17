@@ -150,12 +150,14 @@ public class othello extends JPanel {
                  if (player == "black" && icon == blankIcon && blackDiscs != 0 && GameLogic.isValid(1,x,y, boardMatrix)) {
                     othello.flipDiscs(x, y, 1);
                     label.setIcon(blackIcon);
-                    blackDiscs ++;
                     Status.setText("Status: White's turn.");
-                    blackCount.setText("Black: " + blackDiscs);
                     System.out.printf("Jlabel[%d][%d] is " + player + "%n",x,y);
                     othello.boardMatrix[x][y] = 1;
                     othello.printBoard();
+                    System.out.println("BlackDiscs:"+blackDiscs);
+                    System.out.println("WhiteDiscs:"+whiteDiscs);
+                    blackCount.setText("Black: " + blackDiscs);
+                    whiteCount.setText("White: " + whiteDiscs);
                     resetCellsHighlighted();
                     if(highlightPossibleMoves("white"))
                       player = "white";
@@ -167,12 +169,14 @@ public class othello extends JPanel {
                 else if (player == "white" && icon == blankIcon && whiteDiscs != 0 && GameLogic.isValid(2,x,y, boardMatrix)) {
                     othello.flipDiscs(x, y, 2);
                     label.setIcon(whiteIcon);
-                    whiteDiscs ++;
                     Status.setText("Status: Black's turn");
-                    whiteCount.setText("White: " + whiteDiscs);
                     System.out.printf("Jlabel[%d][%d] is " + player + "%n",x,y);
                     othello.boardMatrix[x][y] = 2;  
                     othello.printBoard();
+                    System.out.println("BlackDiscs:"+blackDiscs);
+                    System.out.println("WhiteDiscs:"+whiteDiscs);
+                    whiteCount.setText("White: " + whiteDiscs);
+                    blackCount.setText("Black: " + blackDiscs);
                     resetCellsHighlighted();
                     if(highlightPossibleMoves("black"))
                       player = "black";
@@ -191,10 +195,17 @@ public class othello extends JPanel {
     static othello mainPanel = new othello();
 
     private static void printBoard() {
-      
+        blackDiscs = 0;
+        whiteDiscs = 0;
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                System.out.print(" " + mainPanel.boardMatrix[j][i]);
+                System.out.print(" " + boardMatrix[j][i]);
+                if(boardMatrix[j][i] == 1){
+                  blackDiscs+=1;
+                }
+                else if(boardMatrix[j][i] == 2){
+                  whiteDiscs+=1; 
+                }
             }
             System.out.println();
         }
