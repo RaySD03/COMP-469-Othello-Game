@@ -33,6 +33,7 @@ public class othello extends JPanel {
     private static String player = "black"; 
     private static int blackDiscs = 2;
     private static int whiteDiscs = 2;
+	private static int totalDiscs = 4;
     private static int[][] boardMatrix = new int[8][8]; // 0 = blank, 1 = black, 2 = white
     private static int[][] affectedDiscs = new int[size][size];
 
@@ -155,9 +156,11 @@ public class othello extends JPanel {
                     othello.boardMatrix[x][y] = 1;
                     othello.printBoard();
                     System.out.println("BlackDiscs:"+blackDiscs);
-                    System.out.println("WhiteDiscs:"+whiteDiscs);
+                    System.out.println("WhiteDiscs:"+whiteDiscs +"   ");
+					 System.out.println("totalDiscs:"+ (whiteDiscs+blackDiscs));
                     blackCount.setText("Black: " + blackDiscs);
-                    whiteCount.setText("White: " + whiteDiscs);
+                    whiteCount.setText("White: " + whiteDiscs +"   ");
+					 totalCount.setText("Total Disks: " + (whiteDiscs + blackDiscs));
                     resetCellsHighlighted();
                     if(highlightPossibleMoves("white"))
                       player = "white";
@@ -174,9 +177,11 @@ public class othello extends JPanel {
                     othello.boardMatrix[x][y] = 2;  
                     othello.printBoard();
                     System.out.println("BlackDiscs:"+blackDiscs);
-                    System.out.println("WhiteDiscs:"+whiteDiscs);
-                    whiteCount.setText("White: " + whiteDiscs);
+                    System.out.println("WhiteDiscs:"+whiteDiscs +"   ");
+						 System.out.println("totalDiscs:"+ (whiteDiscs+blackDiscs));
+                    whiteCount.setText("White: " + whiteDiscs +"   ");
                     blackCount.setText("Black: " + blackDiscs);
+						totalCount.setText("Total Disks: " + (whiteDiscs + blackDiscs));
                     resetCellsHighlighted();
                     if(highlightPossibleMoves("black"))
                       player = "black";
@@ -202,9 +207,11 @@ public class othello extends JPanel {
                 System.out.print(" " + boardMatrix[j][i]);
                 if(boardMatrix[j][i] == 1){
                   blackDiscs+=1;
+				  totalDiscs++;
                 }
                 else if(boardMatrix[j][i] == 2){
                   whiteDiscs+=1; 
+				  totalDiscs++;
                 }
             }
             System.out.println();
@@ -302,8 +309,8 @@ public class othello extends JPanel {
         mainPanel.labelGrid[3][5].setBackground(Color.GREEN);
 
         blackCount.setText("Black: " + blackDiscs);
-        whiteCount.setText("White: " + whiteDiscs);
-		totalCount.setText("   " +"Total Disks: " + (blackDiscs + whiteDiscs));
+        whiteCount.setText("White: " + whiteDiscs +"   ");
+		totalCount.setText("Total Disks: " +(whiteDiscs+blackDiscs));
         Status.setText("Status: Black begins");
     }
 
