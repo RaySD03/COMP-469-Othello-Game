@@ -40,6 +40,8 @@ public class GameLogic {
                         //System.out.println("|| checking square[" + ix + "][" + iy + "]");
                         if(boardMatrix[ix][iy] == color)  
                             return true;
+                        if(boardMatrix[ix][iy] == 0)
+                          break;
                         ix+=xpos;
                         iy+=ypos;
                     }
