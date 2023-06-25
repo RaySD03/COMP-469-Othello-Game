@@ -157,19 +157,16 @@ public class othello extends JPanel {
                 Icon icon = label.getIcon();
           
                 if (activePlayer == "black" && icon == blankIcon && !isGameOver() && logic.isValid(1, x, y, boardMatrix)) {
-
                     othello.placeDisc(activePlayer, x, y);
                     othello.flipDiscs(x, y, 1);
                     resetCellsHighlighted();
-                   
+                    
                     activePlayer = "white";
                     miniMax(boardMatrix, 3, true);
                     placeDisc("white", bestX, bestY);
                     flipDiscs(bestX, bestY, 2);
                     highlightPossibleMoves("black");
-                     othello.printBoard();
-                    //bestX = 0;
-                    //bestY = 0;
+                    othello.printBoard();
                 }
             }
         }
@@ -188,13 +185,12 @@ public class othello extends JPanel {
             for (int j = 0; j < size; j++) {
                 System.out.print(" " + mainPanel.boardMatrix[i][j]);
                 if(boardMatrix[j][i] == 1){
-                  blackDiscs+=1;
-				  blackCount.setText("black: " + blackDiscs);
+                     blackDiscs++;
+		     blackCount.setText("black: " + blackDiscs);
                 }
                 else if(boardMatrix[j][i] == 2){
-                  whiteDiscs++;  
-                  whiteCount.setText("white: " + whiteDiscs);
-				  
+                     whiteDiscs++;  
+                     whiteCount.setText("white: " + whiteDiscs);		  
                 }
             }
             System.out.println();
@@ -223,7 +219,6 @@ public class othello extends JPanel {
         if (whiteDiscs + blackDiscs == size * size) { // Check if all discs are placed
             return true;
         }
-
         else {
             return false;
         }
@@ -243,7 +238,7 @@ public class othello extends JPanel {
         blackDiscs = 0;
         activePlayer = "black";
 
-        //Initialize the board with 4 discs
+        //Initialize the board with 4 discs for each player
         mainPanel.boardMatrix[3][3] = 1;
         mainPanel.boardMatrix[3][4] = 2;
         mainPanel.boardMatrix[4][4] = 1;
@@ -254,7 +249,7 @@ public class othello extends JPanel {
         mainPanel.labelGrid[4][4].setIcon(blackIcon);
         mainPanel.labelGrid[4][3].setIcon(whiteIcon);
 
-        // Highlight possible moves
+        // Highlight possible moves for beginner
         mainPanel.labelGrid[5][3].setBackground(Color.GREEN);
         mainPanel.labelGrid[4][2].setBackground(Color.GREEN);
         mainPanel.labelGrid[2][4].setBackground(Color.GREEN);
@@ -376,7 +371,6 @@ public class othello extends JPanel {
             black += cornerWeight;
         }
         
-
         return white - black;
     }
 
@@ -393,7 +387,6 @@ public class othello extends JPanel {
     public static int bestY = 0;
 
     public static int miniMax(int[][] game, int depth, Boolean maximizing) {
-   
 
         if (depth == 0) {
             return maximizing ? evaluate(game) : -evaluate(game);
