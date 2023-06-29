@@ -108,8 +108,7 @@ public class othello extends JPanel {
 
     public static void placeDisc(String color,int x, int y) {
         
-        if (color == "black") {
-            
+        if (color == "black") {    
             blackDiscs++;
             Status.setText("Status: White's turn.");
             blackCount.setText("Black: " + blackDiscs);
