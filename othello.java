@@ -152,15 +152,15 @@ public class othello extends JPanel {
                     othello.flipDiscs(x, y, 1);
                     label.setIcon(blackIcon);
                     Status.setText("Status: White's turn.");
-                    System.out.printf("Jlabel[%d][%d] is " + player + "%n",x,y);
                     othello.boardMatrix[x][y] = 1;
                     othello.printBoard();
-                    System.out.println("BlackDiscs:"+blackDiscs);
-                    System.out.println("WhiteDiscs:"+whiteDiscs +"   ");
-					 System.out.println("totalDiscs:"+ (whiteDiscs+blackDiscs));
                     blackCount.setText("Black: " + blackDiscs);
                     whiteCount.setText("White: " + whiteDiscs +"   ");
-					 totalCount.setText("Total Disks: " + (whiteDiscs + blackDiscs));
+					          totalCount.setText("Total Disks: " + (whiteDiscs + blackDiscs));
+
+                    int[] aimove = GameLogic.miniMax(boardMatrix, 1, true);
+                    System.out.println("MinMax Moves: " + aimove[1] + aimove[2] + "for value of " + aimove[0]);
+
                     resetCellsHighlighted();
                     if(highlightPossibleMoves("white"))
                       player = "white";
@@ -173,15 +173,15 @@ public class othello extends JPanel {
                     othello.flipDiscs(x, y, 2);
                     label.setIcon(whiteIcon);
                     Status.setText("Status: Black's turn");
-                    System.out.printf("Jlabel[%d][%d] is " + player + "%n",x,y);
                     othello.boardMatrix[x][y] = 2;  
                     othello.printBoard();
-                    System.out.println("BlackDiscs:"+blackDiscs);
-                    System.out.println("WhiteDiscs:"+whiteDiscs +"   ");
-						 System.out.println("totalDiscs:"+ (whiteDiscs+blackDiscs));
                     whiteCount.setText("White: " + whiteDiscs +"   ");
                     blackCount.setText("Black: " + blackDiscs);
-						totalCount.setText("Total Disks: " + (whiteDiscs + blackDiscs));
+						        totalCount.setText("Total Disks: " + (whiteDiscs + blackDiscs));
+
+                    int[] aimove = GameLogic.miniMax(boardMatrix, 1, false);
+                    System.out.println("MinMax Moves: " + aimove[1] + "," + aimove[2] + "for value of " + aimove[0]);
+
                     resetCellsHighlighted();
                     if(highlightPossibleMoves("black"))
                       player = "black";
@@ -218,44 +218,37 @@ public class othello extends JPanel {
         }
     }
 
-    public static boolean isValidMove(String player, int x, int y) {
-    if (boardMatrix[y][x] != 0) return false; // cell is not empty
+    private static void printBoardState(int[][] boardState) { //General version of printboard for debugging
+      System.out.print("---------------------\n");
+      for (int i = 0; i < size; i++) {
+          for (int j = 0; j < size; j++) {
+              System.out.print(" " + boardState[j][i]);
+          }
+          System.out.println();
+      }
+      System.out.println("---------------------\n");
+    }
 
-    int opponent = player.equals("black") ? 2 : 1;
+    private static void printValidMoves(char[][] boardState) { //General version of printboard for debugging
+      System.out.print("///////////////////////\n");
+      for (int i = 0; i < size; i++) {
+          for (int j = 0; j < size; j++) {
+              if(boardState[j][i] == 't')
+                System.out.print(" " + boardState[j][i]);
+              else
+                System.out.print(" 0");
 
-    int[][] directions = {
-        {-1, -1}, {-1, 0}, {-1, 1},
-        {0, -1},{0, 1},
-        {1, -1}, {1, 0}, {1, 1}
-    };
-
-    for (int[] dir : directions) {
-        int dx = dir[0], dy = dir[1];
-        int curX = x + dx, curY = y + dy;
-
-        boolean hasOpponent = false;
-        while (curX >= 0 && curX < size && curY >= 0 && curY < size) {
-            if (boardMatrix[curY][curX] == opponent) {
-                hasOpponent = true;
-            } else if (boardMatrix[curY][curX] == 0 || !hasOpponent) {
-                break;
-            } else if (boardMatrix[curY][curX] == 3 - opponent) {
-                return true;
-            }
-
-            curX += dx;
-            curY += dy;
-            }
-	 }
-
-      return false;
-   }
+          }
+          System.out.println();
+      }
+      System.out.println("/////////////////\n");
+    }
 
    public static boolean highlightPossibleMoves(String player) {  //added boolean to see is player has a valid move
         boolean hasMove = false;
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                if(GameLogic.isValid(getPlayerID(player),i,j,boardMatrix) && boardMatrix[i][j] == 0) { //For some reason it highlights moves with pieces on square, so check if square occupied
+                if(GameLogic.isValid(getPlayerID(player),i,j,boardMatrix)) { 
                     labelGrid[i][j].setBackground(Color.GREEN);
                     hasMove = true;
                 }
