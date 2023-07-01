@@ -26,7 +26,7 @@ public class othello extends JPanel {
     static JLabel Status = new JLabel("Status: Black begins");
     static JLabel blackCount = new JLabel("Black: 2");
     static JLabel whiteCount = new JLabel("White: 2");
-	static JLabel totalCount = new JLabel("Total Disks: 4");
+    static JLabel totalCount = new JLabel("Total Disks: 4");
     static JLabel winner = new JLabel("Winner: ");
     static JLabel skip = new JLabel("Skip: false");
     static JButton resetButton = new JButton("Start Over");
@@ -37,7 +37,7 @@ public class othello extends JPanel {
     private static String player = "black"; 
     private static int blackDiscs = 2;
     private static int whiteDiscs = 2;
-	private static int totalDiscs = 4;
+    private static int totalDiscs = 4;
     private static boolean skipTurn = false;
     private static int[][] boardMatrix = new int[8][8]; // 0 = blank, 1 = black, 2 = white
 
@@ -111,7 +111,7 @@ public class othello extends JPanel {
         }
     }
 
-    public static void placeDisc(String color,int x,int y) {
+    public static void placeDisc(String color, int x, int y) {
         
         if (color == "black") {
             blackDiscs++;
@@ -171,9 +171,9 @@ public class othello extends JPanel {
                     placeDisc("white", aimove[1], aimove[2]);
                     flipDiscs(aimove[1], aimove[2], 2);
 
-                    if(highlightPossibleMoves("black"))
+                    if (highlightPossibleMoves("black"))
                       player = "black";
-                    else if(highlightPossibleMoves("white")) {
+                    else if (highlightPossibleMoves("white")) {
                       System.out.println("White Moves again");
                       skipTurn = true;
                       skip.setText("Skip: true");
@@ -191,8 +191,8 @@ public class othello extends JPanel {
                     highlightPossibleMoves("black");
                     printBoard();
 
-                    if(highlightPossibleMoves("black"))
-                      player = "black";
+                    if (highlightPossibleMoves("black"))
+                       player = "black";
                 }
 
                 if (isGameOver()) {
@@ -201,12 +201,12 @@ public class othello extends JPanel {
                          winner.setText("You won.");
                     else
                          winner.setText("Computer Won.");
-                    gameOver.setVisible(true);
+                         gameOver.setVisible(true);
                 }
 
                 blackCount.setText("Black: " + blackDiscs);
                 whiteCount.setText("White: " + whiteDiscs);
-	            totalCount.setText("Total Disks: " + (whiteDiscs + blackDiscs));
+	        totalCount.setText("Total Disks: " + (whiteDiscs + blackDiscs));
             }
         }
     }
@@ -219,13 +219,13 @@ public class othello extends JPanel {
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 System.out.print(" " + boardMatrix[j][i]);
-                if(boardMatrix[j][i] == 1){
-                  blackDiscs++;
-				  totalDiscs++;
+                if (boardMatrix[j][i] == 1){
+                   blackDiscs++;
+		   totalDiscs++;
                 }
-                else if(boardMatrix[j][i] == 2){
-                  whiteDiscs++; 
-				  totalDiscs++;
+                else if (boardMatrix[j][i] == 2){
+                   whiteDiscs++; 
+		   totalDiscs++;
                 }
             }
             System.out.println();
@@ -247,7 +247,7 @@ public class othello extends JPanel {
       System.out.print("///////////////////////\n");
       for (int i = 0; i < size; i++) {
           for (int j = 0; j < size; j++) {
-              if(boardState[j][i] == 't')
+              if (boardState[j][i] == 't')
                 System.out.print(" " + boardState[j][i]);
               else
                 System.out.print(" 0");
@@ -262,7 +262,7 @@ public class othello extends JPanel {
         boolean hasMove = false;
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                if(GameLogic.isValid(getPlayerID(player), j, i,boardMatrix)) { 
+                if (GameLogic.isValid(getPlayerID(player), j, i,boardMatrix)) { 
                     labelGrid[j][i].setBackground(Color.GREEN);
                     hasMove = true;
                 }
@@ -302,7 +302,7 @@ public class othello extends JPanel {
         blackDiscs = 2;
         skipTurn = false;
         player = "black";
-		totalCount.setText("Total Disks: " + (blackDiscs + whiteDiscs));
+	totalCount.setText("Total Disks: " + (blackDiscs + whiteDiscs));
 
         //Initialize the board with 4 discs
         boardMatrix[3][3] = 1;
@@ -323,7 +323,7 @@ public class othello extends JPanel {
 
         blackCount.setText("Black: " + blackDiscs);
         whiteCount.setText("White: " + whiteDiscs);
-		totalCount.setText("Total Disks: " + (whiteDiscs + blackDiscs));
+	totalCount.setText("Total Disks: " + (whiteDiscs + blackDiscs));
         Status.setText("Status: Black begins");
     }
 
@@ -359,12 +359,13 @@ public class othello extends JPanel {
         Stats.addSeparator();
         Stats.add(whiteCount);
         Stats.addSeparator();
-		Stats.add(totalCount);
+	Stats.add(totalCount);
         Stats.addSeparator();
         Stats.add(skip);
         Stats.setPreferredSize(new Dimension(100, 30));
         mainFrame.add(Stats, BorderLayout.PAGE_START);
 
+	//Display Game Result
         result.add(winner, BorderLayout.CENTER);
         gameOver.getContentPane().add(result);
         gameOver.pack();
