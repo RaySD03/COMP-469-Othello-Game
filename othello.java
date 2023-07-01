@@ -198,9 +198,9 @@ public class othello extends JPanel {
                 if (isGameOver()) {
                     Status.setText("Game Over");
                     if (blackDiscs > whiteDiscs)
-                         winner.setText("Winner: Black.");
+                         winner.setText("You won.");
                     else
-                         winner.setText("Winner: White.");
+                         winner.setText("Computer Won.");
                     gameOver.setVisible(true);
                 }
 
