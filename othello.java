@@ -158,8 +158,10 @@ public class othello extends JPanel {
                     whiteCount.setText("White: " + whiteDiscs +"   ");
 					          totalCount.setText("Total Disks: " + (whiteDiscs + blackDiscs));
 
-                    int[] aimove = GameLogic.miniMax(boardMatrix, 1, true);
-                    System.out.println("MinMax Moves: " + aimove[1] + aimove[2] + "for value of " + aimove[0]);
+                    int[] aimoveprune = GameLogic.miniMaxAB(boardMatrix, 3, true, Integer.MIN_VALUE,Integer.MAX_VALUE);
+                    int[] aimove = GameLogic.miniMax(boardMatrix, 3, true);
+                    System.out.println("MinMax Moves: " + aimove[1] + "," + aimove[2] + "for value of " + aimove[0] + " | Searched through " + aimove[3] + " states");
+                    System.out.println("MinMax with Pruning Moves: " + aimoveprune[1] + "," + aimoveprune[2] + "for value of " + aimoveprune[0] + " | Searched through " + aimoveprune[3] + " states");
 
                     resetCellsHighlighted();
                     if(highlightPossibleMoves("white"))
@@ -179,8 +181,10 @@ public class othello extends JPanel {
                     blackCount.setText("Black: " + blackDiscs);
 						        totalCount.setText("Total Disks: " + (whiteDiscs + blackDiscs));
 
-                    int[] aimove = GameLogic.miniMax(boardMatrix, 1, false);
-                    System.out.println("MinMax Moves: " + aimove[1] + "," + aimove[2] + "for value of " + aimove[0]);
+                    int[] aimoveprune = GameLogic.miniMaxAB(boardMatrix, 3, false, Integer.MIN_VALUE, Integer.MAX_VALUE);
+                    int[] aimove = GameLogic.miniMax(boardMatrix, 3, false);
+                    System.out.println("MinMax Moves: " + aimove[1] + "," + aimove[2] + "for value of " + aimove[0] + " | Searched through " + aimove[3] + " states");
+                    System.out.println("MinMax with Pruning Moves: " + aimoveprune[1] + "," + aimoveprune[2] + "for value of " + aimoveprune[0] + " | Searched through " + aimoveprune[3] + " states");
 
                     resetCellsHighlighted();
                     if(highlightPossibleMoves("black"))
