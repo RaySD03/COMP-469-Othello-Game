@@ -151,7 +151,7 @@ public class othello extends JPanel {
                  if (player == "black" && icon == blankIcon && blackDiscs != 0 && GameLogic.isValid(1,x,y, boardMatrix)) {
                     othello.flipDiscs(x, y, 1);
                     label.setIcon(blackIcon);
-                    Status.setText("Status: White's turn.");
+                    Status.setText("Status: White's turn");
                     othello.boardMatrix[x][y] = 1;
                     othello.printBoard();
                     blackCount.setText("Black: " + blackDiscs);
@@ -169,7 +169,9 @@ public class othello extends JPanel {
                     else if(highlightPossibleMoves("black"))
                       System.out.println("Black Moves again");
                     else
-                      System.out.println("Game is over"); //Placeholder for GUI display to show game is over
+						 Status.setText("Status: Game Over");
+                    //  System.out.println("Game is over"); //Placeholder for GUI display to show game is over
+					 
                 }
                 else if (player == "white" && icon == blankIcon && whiteDiscs != 0 && GameLogic.isValid(2,x,y, boardMatrix)) {
                     othello.flipDiscs(x, y, 2);
@@ -192,7 +194,9 @@ public class othello extends JPanel {
                     else if(highlightPossibleMoves("white"))
                       System.out.println("White moves again");
                     else
-                      System.out.println("Game is over");  //Placeholder for GUI display to show game is over
+						 Status.setText("Status: Game Over");
+                    //  System.out.println("Game is over");  //Placeholder for GUI display to show game is over
+				  
                 } else {
                   System.out.println("Move is not valid"); //GUI display later maybe
                 }
