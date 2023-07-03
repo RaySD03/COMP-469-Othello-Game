@@ -122,7 +122,38 @@ public class GameLogic {
   
   }
 
-  public static int evaluate(int[][] Board) {
+  public static int staticWeightHeuristic(int[][] board){
+    int black = 0;
+    int white = 0;
+
+    int[][] boardweight = {
+      {4, -3, 2, 2, 2, 2, -3, 4},
+      {-3,-4, -1 ,-1, -1, -1, -4, -3}, 
+      {2, -1, 1, 0, 0, 1, -1, 2},
+      {2, -1, 0, 1, 1, 0, -1, 2}, 
+      {2, -1, 0, 1, 1, 0, -1, 2},
+      {2, -1, 1, 0, 0, 1, -1, 2}, 
+      {-3, -4, -1, -1, -1, -1, -4, -3}, 
+      {4, -3, 2, 2, 2, 2, -3, 4}
+    };
+
+    for (int i = 0; i < 8; i++) {
+      for (int j = 0; j < 8; j++) {   
+          if (board[j][i] == 1) {
+              black += boardweight[i][j];
+          }
+          else if (board[j][i] == 2) {
+              white += boardweight[i][j];
+          }
+      }
+    }
+    return white - black;
+  }
+
+  
+
+
+  public static int cornerWeightHeuristic(int[][] Board) {
     int black = 0;
     int white = 0;
 
@@ -174,6 +205,14 @@ public class GameLogic {
     return white - black;
   }
 
+  public static int evaluate(int[][] boardState, int heuristic){ //heuristic numbers 1 = corner weight, 2 = static weight
+    if(heuristic == 1)
+      return cornerWeightHeuristic(boardState);
+    if(heuristic == 2)
+      return staticWeightHeuristic(boardState);
+    return 0;
+  }
+
   private static void printBoardState(int[][] boardState) { //General version of printboard for debugging
     System.out.print("---------------------\n");
     for (int i = 0; i < 8; i++) {
@@ -185,11 +224,11 @@ public class GameLogic {
     System.out.print("---------------------\n");
   }
 
-  public static int[] miniMax(int[][] game, int depth, Boolean maximizing) {  //black minimizing, white maximizing
+  public static int[] miniMax(int[][] game, int depth, Boolean maximizing, int heuristic) {  //black minimizing, white maximizing
     int[] result = new int[4];     //initialize values for return result[0] = best value, result[1] = xcoord, result[2] = ycoord
 
     if (depth == 0) {              //recursion end condition, once end of tree reached return value of board 
-        result[0] = maximizing ? evaluate(game) : -evaluate(game);
+        result[0] = maximizing ? evaluate(game, heuristic) : -evaluate(game, heuristic);
         result[3] = 1;
         return result;
     }
@@ -201,7 +240,7 @@ public class GameLogic {
         int[][] newStateBoard = copyBoard(game);
         newStateBoard = processNewBoard(newStateBoard, validList.get(i).x, validList.get(i).y, 2); //create new state board from valid move
              
-        int[] value = miniMax(newStateBoard, depth - 1, !maximizing);   
+        int[] value = miniMax(newStateBoard, depth - 1, !maximizing, heuristic);   
         result[3] += value[3]; //add amount of interations from child nods                                     //recursive call to find best move from valid move
         //printBoardState(newStateBoard);
         //System.out.println("depth:" + depth);
@@ -222,7 +261,7 @@ public class GameLogic {
         int[][] newStateBoard = copyBoard(game);
         newStateBoard = processNewBoard(newStateBoard, validList.get(i).x, validList.get(i).y, 1); //create new state board from valid move
                  
-        int[] value = miniMax(newStateBoard, depth - 1, maximizing);                                        //recursive call to find best move from valid move
+        int[] value = miniMax(newStateBoard, depth - 1, maximizing, heuristic);                                        //recursive call to find best move from valid move
         result[3] += value[3]; //add amount of interations from child nods
         //printBoardState(newStateBoard);
         //System.out.println("depth:" + depth);
@@ -238,10 +277,10 @@ public class GameLogic {
     }
   } 
 
-  public static int[] miniMaxAB(int[][] game, int depth, Boolean maximizing, int alpha, int beta) {  //black minimizing, white maximizing 
+  public static int[] miniMaxAB(int[][] game, int depth, Boolean maximizing, int alpha, int beta, int heuristic) {  //black minimizing, white maximizing 
     int[] result = new int[4];     //initialize values for return result[0] = best value, result[1] = xcoord, result[2] = ycoord, result[4] = iterations
     if (depth == 0) {              //recursion end condition, once end of tree reached return value of board 
-        result[0] = maximizing ? evaluate(game) : -evaluate(game);
+        result[0] = maximizing ? evaluate(game, heuristic) : -evaluate(game, heuristic);
         result[3] = 1;
         return result;
     }
@@ -253,7 +292,7 @@ public class GameLogic {
         int[][] newStateBoard = copyBoard(game);
         newStateBoard = processNewBoard(newStateBoard, validList.get(i).x, validList.get(i).y, 2); //create new state board from valid move
                  
-        int[] value = miniMaxAB(newStateBoard, depth - 1, !maximizing, result[0], beta); //recursive call to find best move from valid move, important-next call is for minimizing player
+        int[] value = miniMaxAB(newStateBoard, depth - 1, !maximizing, result[0], beta, heuristic); //recursive call to find best move from valid move, important-next call is for minimizing player
         result[3] += value[3]; //add amount of interations from child nods
         //printBoardState(newStateBoard);
         //System.out.println("depth:" + depth);
@@ -282,7 +321,7 @@ public class GameLogic {
         int[][] newStateBoard = copyBoard(game);
         newStateBoard = processNewBoard(newStateBoard, validList.get(i).x, validList.get(i).y, 1); //create new state board from valid move
                  
-        int[] value = miniMaxAB(newStateBoard, depth - 1, maximizing, alpha, result[0]);                                        //recursive call to find best move from valid move
+        int[] value = miniMaxAB(newStateBoard, depth - 1, maximizing, alpha, result[0],heuristic);                                        //recursive call to find best move from valid move
         result[3] += value[3];
         //printBoardState(newStateBoard);
         //System.out.println("depth:" + depth);
