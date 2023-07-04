@@ -166,12 +166,18 @@ public class othello extends JPanel {
                     System.out.println("MinMax with Pruning Moves: " + aimoveprune[1] + "," + aimoveprune[2] + "for value of " + aimoveprune[0] + " | Searched through " + aimoveprune[3] + " states");
 
                     resetCellsHighlighted();
-                    if(highlightPossibleMoves("white"))
+                    if(highlightPossibleMoves("white")) {
                       player = "white";
-                    else if(highlightPossibleMoves("black"))
+                    }
+                    else if(highlightPossibleMoves("black")){
                       System.out.println("Black Moves again");
-                    else
+                    }  
+                    else {
                       Status.setText("Status: Game Over");; //Placeholder for GUI display to show game is over
+                      if(!highlightPossibleMoves("white") && !highlightPossibleMoves("black")) {
+                      checkWinner();
+                      }
+                    }
                 }
                 else if (player == "white" && icon == blankIcon && whiteDiscs != 0 && GameLogic.isValid(2,x,y, boardMatrix)) {
                     othello.flipDiscs(x, y, 2);
@@ -189,12 +195,18 @@ public class othello extends JPanel {
                     System.out.println("MinMax with Pruning Moves: " + aimoveprune[1] + "," + aimoveprune[2] + "for value of " + aimoveprune[0] + " | Searched through " + aimoveprune[3] + " states");
 
                     resetCellsHighlighted();
-                    if(highlightPossibleMoves("black"))
+                    if(highlightPossibleMoves("black")){
                       player = "black";
-                    else if(highlightPossibleMoves("white"))
+                    }
+                    else if(highlightPossibleMoves("white")) {
                       System.out.println("White moves again");
-                    else
+                    }
+                    else {
                       Status.setText("Status: Game Over");  //Placeholder for GUI display to show game is over
+                      if(!highlightPossibleMoves("white") && !highlightPossibleMoves("black")) {
+                      checkWinner();
+                      }
+                    }  
                 } else {
                   System.out.println("Move is not valid"); //GUI display later maybe
                 }
@@ -220,12 +232,18 @@ public class othello extends JPanel {
 				totalCount.setText("Total Disks: " + (whiteDiscs + blackDiscs));
 
       resetCellsHighlighted();
-      if(highlightPossibleMoves("white"))
+      if(highlightPossibleMoves("white")) {
         player = "white";
-      else if(highlightPossibleMoves("black"))
+      }  
+      else if(highlightPossibleMoves("black")) {
         Status.setText("Status: Black's Turn Again");
-      else
+      }
+      else {
         Status.setText("Status: Game Over");  //Placeholder for GUI display to show game is over
+        if(!highlightPossibleMoves("white") && !highlightPossibleMoves("black")) {
+        checkWinner();
+        }
+      }  
     }
     else {
       int[] aimoveprune = GameLogic.miniMaxAB(boardMatrix, 3, true, Integer.MIN_VALUE, Integer.MAX_VALUE,2);
@@ -241,17 +259,31 @@ public class othello extends JPanel {
 			totalCount.setText("Total Disks: " + (whiteDiscs + blackDiscs));
 
       resetCellsHighlighted();
-      if(highlightPossibleMoves("black"))
+      if(highlightPossibleMoves("black")) {
         player = "black";
-      else if(highlightPossibleMoves("white"))
+      }  
+      else if(highlightPossibleMoves("white")) {
         Status.setText("Status: White's Turn Again");
-      else
+      }
+      else {
         Status.setText("Status: Game Over");  //Placeholder for GUI display to show game is over
+        if(!highlightPossibleMoves("white") && !highlightPossibleMoves("black")){
+        checkWinner();
+        }
+      }  
   }
 
     }
 
-
+    static void checkWinner() {
+        if (blackDiscs > whiteDiscs) {
+            JOptionPane.showMessageDialog(null, "Black won the game!");
+        } else if (whiteDiscs > blackDiscs) {
+            JOptionPane.showMessageDialog(null, "White won the game!");
+        } else {
+            JOptionPane.showMessageDialog(null, "It's a tie!");
+        }
+    }
 
 
 
