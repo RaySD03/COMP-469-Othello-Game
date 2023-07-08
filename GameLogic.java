@@ -122,6 +122,7 @@ public class GameLogic {
   
   }
 
+
   public static int staticWeightHeuristic(int[][] board){
     int black = 0;
     int white = 0;
@@ -140,18 +141,15 @@ public class GameLogic {
     for (int i = 0; i < 8; i++) {
       for (int j = 0; j < 8; j++) {   
           if (board[j][i] == 1) {
-              black += boardweight[i][j];
+              black += boardweight[j][i];
           }
           else if (board[j][i] == 2) {
-              white += boardweight[i][j];
+              white += boardweight[j][i];
           }
       }
     }
     return white - black;
   }
-
-  
-
 
   public static int cornerWeightHeuristic(int[][] Board) {
     int black = 0;
@@ -228,7 +226,7 @@ public class GameLogic {
     int[] result = new int[4];     //initialize values for return result[0] = best value, result[1] = xcoord, result[2] = ycoord
 
     if (depth == 0) {              //recursion end condition, once end of tree reached return value of board 
-        result[0] = maximizing ? evaluate(game, heuristic) : -evaluate(game, heuristic);
+        result[0] = evaluate(game, heuristic);
         result[3] = 1;
         return result;
     }
@@ -240,10 +238,9 @@ public class GameLogic {
         int[][] newStateBoard = copyBoard(game);
         newStateBoard = processNewBoard(newStateBoard, validList.get(i).x, validList.get(i).y, 2); //create new state board from valid move
              
-        int[] value = miniMax(newStateBoard, depth - 1, !maximizing, heuristic);   
+        int[] value = miniMax(newStateBoard, depth - 1, false, heuristic);   
         result[3] += value[3]; //add amount of interations from child nods                                     //recursive call to find best move from valid move
-        //printBoardState(newStateBoard);
-        //System.out.println("depth:" + depth);
+
 
         if (value[0] > bestValue) {  //returns coorinates of move as well. we dont need xy coordinates until depth 1 but we can use the values for tracing the path.                                         
           result[0] = value[0];
@@ -251,8 +248,8 @@ public class GameLogic {
           result[1] = validList.get(i).x;
           result[2] = validList.get(i).y;
         }
-      }
-      return result;  
+      }  
+       return result;  
     }    
     else {    //minimizing
       int bestValue = Integer.MAX_VALUE;
@@ -261,10 +258,8 @@ public class GameLogic {
         int[][] newStateBoard = copyBoard(game);
         newStateBoard = processNewBoard(newStateBoard, validList.get(i).x, validList.get(i).y, 1); //create new state board from valid move
                  
-        int[] value = miniMax(newStateBoard, depth - 1, maximizing, heuristic);                                        //recursive call to find best move from valid move
+        int[] value = miniMax(newStateBoard, depth - 1, true, heuristic);                                        //recursive call to find best move from valid move
         result[3] += value[3]; //add amount of interations from child nods
-        //printBoardState(newStateBoard);
-        //System.out.println("depth:" + depth);
 
         if (value[0] < bestValue) {  //returns coorinates of move as well. we dont need xy coordinates until depth 1 but we can use the values for tracing the path.                                         
           result[0] = value[0];
@@ -278,9 +273,9 @@ public class GameLogic {
   } 
 
   public static int[] miniMaxAB(int[][] game, int depth, Boolean maximizing, int alpha, int beta, int heuristic) {  //black minimizing, white maximizing 
-    int[] result = new int[4];     //initialize values for return result[0] = best value, result[1] = xcoord, result[2] = ycoord, result[4] = iterations
+    int[] result = new int[4];     //initialize values for return result[0] = best value, result[1] = xcoord, result[2] = ycoord, result[3] = iterations
     if (depth == 0) {              //recursion end condition, once end of tree reached return value of board 
-        result[0] = maximizing ? evaluate(game, heuristic) : -evaluate(game, heuristic);
+        result[0] = evaluate(game, heuristic);
         result[3] = 1;
         return result;
     }
@@ -292,21 +287,18 @@ public class GameLogic {
         int[][] newStateBoard = copyBoard(game);
         newStateBoard = processNewBoard(newStateBoard, validList.get(i).x, validList.get(i).y, 2); //create new state board from valid move
                  
-        int[] value = miniMaxAB(newStateBoard, depth - 1, !maximizing, result[0], beta, heuristic); //recursive call to find best move from valid move, important-next call is for minimizing player
+        int[] value = miniMaxAB(newStateBoard, depth - 1, false, bestValue, beta, heuristic); //recursive call to find best move from valid move, important-next call is for minimizing player
         result[3] += value[3]; //add amount of interations from child nods
-        //printBoardState(newStateBoard);
-        //System.out.println("depth:" + depth);
 
         if (value[0] > bestValue) {  //returns coorinates of move as well. we dont need xy coordinates until depth 1 but we can use the values for tracing the path.                                         
-          alpha = value[0];
           bestValue = value[0];
           result[0] = value[0];
           result[1] = validList.get(i).x;
           result[2] = validList.get(i).y;
         }
-        if(value[0] > beta){  //if max node finds value greater than beta value stop search early/prune and return the value
-          System.out.println("pruned");
-          result[0] = value[0];
+        if(bestValue >= beta){  //if max node finds value greater than beta value stop search early/prune and return the value
+          System.out.println("Pruning because returned value: " + bestValue + " beta: " + beta);
+          result[0] = bestValue;
           result[1] = validList.get(i).x;
           result[2] = validList.get(i).y;
           return result;
@@ -321,21 +313,18 @@ public class GameLogic {
         int[][] newStateBoard = copyBoard(game);
         newStateBoard = processNewBoard(newStateBoard, validList.get(i).x, validList.get(i).y, 1); //create new state board from valid move
                  
-        int[] value = miniMaxAB(newStateBoard, depth - 1, maximizing, alpha, result[0],heuristic);                                        //recursive call to find best move from valid move
+        int[] value = miniMaxAB(newStateBoard, depth - 1, true, alpha, bestValue,heuristic);                                        //recursive call to find best move from valid move
         result[3] += value[3];
-        //printBoardState(newStateBoard);
-        //System.out.println("depth:" + depth);
 
         if (value[0] < bestValue) {  //returns coorinates of move as well. we dont need xy coordinates until depth 1 but we can use the values for tracing the path.                                         
-          beta = value[0];
           bestValue = value[0];
           result[0] = value[0];
           result[1] = validList.get(i).x;
           result[2] = validList.get(i).y;
         }
-        if(value[0] < alpha){  //if min node finds value lesser than alpha value stop search early/prune and return the value
-          System.out.println("pruned");
-          result[0] = value[0];
+        if(bestValue <= alpha){  //if min node finds value lesser than alpha value stop search early/prune and return the value
+          System.out.println("Pruning because returned value: " + bestValue + " alpha: " + alpha);
+          result[0] = bestValue;
           result[1] = validList.get(i).x;
           result[2] = validList.get(i).y;
           return result;
