@@ -433,11 +433,12 @@ public class othello extends JPanel {
 		    }
 	    });
 	    
-	    // MouseEvent for reseting game
+	    // MouseEvent for resetting game
 	    resetButton.addMouseListener(new MouseAdapter() {
 		    public void mouseClicked(MouseEvent e) {
 			    System.out.println("Restart Game.");
 			    setupGame();
+			    mainPanel.updateUI();
 		    }
 	    });
     }
