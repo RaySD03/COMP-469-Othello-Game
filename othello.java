@@ -18,8 +18,8 @@ public class othello extends JPanel {
     private static int size = 8;
     private static int icon_length = 65;
     private static final Color backgroundColor = Color.BLACK;     
-    private static final Color cellColor = Color.GREEN.darker();    //Board Cell Baclground Color
-    private static JLabel[][] labelGrid = new JLabel[size][size];   //Represent Cells with 8 x 8 Jlabels
+    private static final Color cellColor = Color.GREEN.darker();    // Board Cell Baclground Color
+    private static JLabel[][] labelGrid = new JLabel[size][size];   // Represent Cells with 8 x 8 Jlabels
     private static Icon blankIcon;
     private static Icon blackIcon;
     private static Icon whiteIcon;
@@ -30,7 +30,7 @@ public class othello extends JPanel {
     static JButton resetButton = new JButton("Start Over");
     static JButton aiMoveButton = new JButton("AI move");
 
-    //Gameplay variables
+    // Gameplay variables
     private static String player = "black"; 
     private static int blackDiscs = 2;
     private static int whiteDiscs = 2;
@@ -173,7 +173,7 @@ public class othello extends JPanel {
                       System.out.println("Black Moves again");
                     }  
                     else {
-                      Status.setText("Status: Game Over");; //Placeholder for GUI display to show game is over
+                      Status.setText("Status: Game Over");; // Placeholder for GUI display to show game is over
                       if (!highlightPossibleMoves("white") && !highlightPossibleMoves("black")) {
                       checkWinner();
                       }
@@ -195,20 +195,20 @@ public class othello extends JPanel {
                     System.out.println("MinMax with Pruning Moves: " + aimoveprune[1] + "," + aimoveprune[2] + "for value of " + aimoveprune[0] + " | Searched through " + aimoveprune[3] + " states");
 
                     resetCellsHighlighted();
-                    if(highlightPossibleMoves("black")){
+                    if (highlightPossibleMoves("black")){
                       player = "black";
                     }
-                    else if(highlightPossibleMoves("white")) {
+                    else if (highlightPossibleMoves("white")) {
                       System.out.println("White moves again");
                     }
                     else {
-                      Status.setText("Status: Game Over");  //Placeholder for GUI display to show game is over
+                      Status.setText("Status: Game Over");  // Placeholder for GUI display to show game is over
                       if(!highlightPossibleMoves("white") && !highlightPossibleMoves("black")) {
                       checkWinner();
                       }
                     }  
                 } else {
-                  System.out.println("Move is not valid"); //GUI display later maybe
+                  System.out.println("Move is not valid"); // GUI display later maybe
                 }
 
             }
@@ -218,18 +218,18 @@ public class othello extends JPanel {
     private static void aiMove() {
       int x;
       int y;
-      if(player == "black"){
-        int[] aimoveprune = GameLogic.miniMaxAB(boardMatrix, 3, false, Integer.MIN_VALUE, Integer.MAX_VALUE,2);
-        x = aimoveprune[1];
-        y = aimoveprune[2];
-        othello.flipDiscs(x, y, 1);
-        labelGrid[x][y].setIcon(blackIcon); 
-        Status.setText("Status: White's turn.");
-        othello.boardMatrix[x][y] = 1;
-        othello.printBoard();
-        blackCount.setText("Black: " + blackDiscs);
-        whiteCount.setText("White: " + whiteDiscs +"   ");
-				totalCount.setText("Total Disks: " + (whiteDiscs + blackDiscs));
+      if(player == "black") {
+	      int[] aimoveprune = GameLogic.miniMaxAB(boardMatrix, 3, false, Integer.MIN_VALUE, Integer.MAX_VALUE,2);
+	      x = aimoveprune[1];
+	      y = aimoveprune[2];
+	      othello.flipDiscs(x, y, 1);
+	      labelGrid[x][y].setIcon(blackIcon); 
+	      Status.setText("Status: White's turn.");
+	      othello.boardMatrix[x][y] = 1;
+	      othello.printBoard();
+	      blackCount.setText("Black: " + blackDiscs);
+	      whiteCount.setText("White: " + whiteDiscs +"   ");
+	      totalCount.setText("Total Disks: " + (whiteDiscs + blackDiscs));
 
       resetCellsHighlighted();
       if(highlightPossibleMoves("white")) {
@@ -239,7 +239,7 @@ public class othello extends JPanel {
         Status.setText("Status: Black's Turn Again");
       }
       else {
-        Status.setText("Status: Game Over");  //Placeholder for GUI display to show game is over
+        Status.setText("Status: Game Over");  // Placeholder for GUI display to show game is over
         if(!highlightPossibleMoves("white") && !highlightPossibleMoves("black")) {
         checkWinner();
         }
@@ -266,13 +266,12 @@ public class othello extends JPanel {
         Status.setText("Status: White's Turn Again");
       }
       else {
-        Status.setText("Status: Game Over");  //Placeholder for GUI display to show game is over
-        if(!highlightPossibleMoves("white") && !highlightPossibleMoves("black")){
-        checkWinner();
-        }
+         Status.setText("Status: Game Over");  // Placeholder for GUI display to show game is over
+         if(!highlightPossibleMoves("white") && !highlightPossibleMoves("black")){
+          checkWinner();
+         }
       }  
-  }
-
+     }
     }
 
     static void checkWinner() {
@@ -285,30 +284,28 @@ public class othello extends JPanel {
         }
     }
 
-
-
     static othello mainPanel = new othello();
 
-    private static void printBoard() {
+    private static void printBoard() { // Prints current board state and updates scores
         blackDiscs = 0;
         whiteDiscs = 0;
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 System.out.print(" " + boardMatrix[j][i]);
-                if(boardMatrix[j][i] == 1){
-                  blackDiscs+=1;
-				  totalDiscs++;
+                if (boardMatrix[j][i] == 1){
+                 	blackDiscs++;
+			totalDiscs++;
                 }
-                else if(boardMatrix[j][i] == 2){
-                  whiteDiscs+=1; 
-				  totalDiscs++;
+                else if (boardMatrix[j][i] == 2){
+			whiteDiscs++; 
+			totalDiscs++;
                 }
             }
             System.out.println();
         }
     }
 
-    private static void printBoardState(int[][] boardState) { //General version of printboard for debugging
+    private static void printBoardState(int[][] boardState) { // General version of printboard for debugging
       System.out.print("---------------------\n");
       for (int i = 0; i < size; i++) {
           for (int j = 0; j < size; j++) {
@@ -319,7 +316,7 @@ public class othello extends JPanel {
       System.out.println("---------------------\n");
     }
 
-    private static void printValidMoves(char[][] boardState) { //General version of printboard for debugging
+    private static void printValidMoves(char[][] boardState) { // General version of printboard for debugging
       System.out.print("///////////////////////\n");
       for (int i = 0; i < size; i++) {
           for (int j = 0; j < size; j++) {
@@ -334,7 +331,7 @@ public class othello extends JPanel {
       System.out.println("/////////////////\n");
     }
 
-   public static boolean highlightPossibleMoves(String player) {  //added boolean to see if player has a valid move
+   public static boolean highlightPossibleMoves(String player) {  // Added boolean to see if player has a valid move
         boolean hasMove = false;
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
@@ -427,7 +424,8 @@ public class othello extends JPanel {
         Stats.addSeparator();
         Stats.add(blackCount);
         Stats.addSeparator();
-        Stats.add(whiteCount);
+	Stats.add(whiteCount);
+        Stats.addSeparator();
 	Stats.add(totalCount);
         Stats.addSeparator();
         Stats.add(aiMoveButton);
@@ -439,7 +437,7 @@ public class othello extends JPanel {
         
         aiMoveButton.addMouseListener(new MouseAdapter() {
           public void mouseClicked(MouseEvent e) {
-            System.out.println("Ai plays next Move");
+            System.out.println("AI plays next Move. \n");
             aiMove();
           }
         });
