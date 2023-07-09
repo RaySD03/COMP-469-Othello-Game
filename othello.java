@@ -296,6 +296,7 @@ public class othello extends JPanel {
 			    }
 		    }
 		    System.out.println();
+		    mainPanel.updateUI();
 	    }
     }
 
